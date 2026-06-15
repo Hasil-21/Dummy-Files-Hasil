@@ -1,14 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "RLDcVfSuLOg=",
+  "dgSpecHash": "OMeGyt1yctg=",
   "success": true,
   "projectFilePath": "C:\\Users\\pca56\\Desktop\\TaskApi\\TaskApi\\TaskApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.apigatewayevents\\3.0.0\\amazon.lambda.apigatewayevents.3.0.0.nupkg.sha512",
     "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.applicationloadbalancerevents\\3.0.0\\amazon.lambda.applicationloadbalancerevents.3.0.0.nupkg.sha512",
-    "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.aspnetcoreserver\\10.0.0\\amazon.lambda.aspnetcoreserver.10.0.0.nupkg.sha512",
+    "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.aspnetcoreserver\\10.1.1\\amazon.lambda.aspnetcoreserver.10.1.1.nupkg.sha512",
     "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.aspnetcoreserver.hosting\\2.0.0\\amazon.lambda.aspnetcoreserver.hosting.2.0.0.nupkg.sha512",
-    "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.core\\3.0.0\\amazon.lambda.core.3.0.0.nupkg.sha512",
+    "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.core\\3.1.0\\amazon.lambda.core.3.1.0.nupkg.sha512",
     "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.logging.aspnetcore\\5.0.0\\amazon.lambda.logging.aspnetcore.5.0.0.nupkg.sha512",
     "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.runtimesupport\\2.0.0\\amazon.lambda.runtimesupport.2.0.0.nupkg.sha512",
     "C:\\Users\\pca56\\.nuget\\packages\\amazon.lambda.serialization.systemtextjson\\3.0.0\\amazon.lambda.serialization.systemtextjson.3.0.0.nupkg.sha512",

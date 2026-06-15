@@ -1,0 +1,50 @@
+version: 0.2
+
+env:
+  variables:
+    CONNECTION_STRING: ""
+
+phases:
+  install:
+    runtime-versions:
+      dotnet: 8.0
+    commands:
+      - echo "Installing dotnet-ef..."
+      - dotnet tool install --global dotnet-ef --version 8.0.0
+      - export PATH="$PATH:/root/.dotnet/tools"
+
+  pre_build:
+    commands:
+      - echo "Restoring packages..."
+      - dotnet restore TaskApi.csproj
+
+  build:
+    commands:
+      - echo "Building..."
+      - dotnet build TaskApi.csproj --configuration Release --no-restore
+
+  post_build:
+    commands:
+      - echo "Running migrations..."
+      - dotnet ef database update --connection "$CONNECTION_STRING"
+
+      - echo "Publishing..."
+      - dotnet publish TaskApi.csproj
+          --configuration Release
+          --runtime linux-x64
+          --self-contained false
+          --output ./publish
+
+      - echo "Zipping..."
+      - cd publish && zip -r ../lambda.zip . && cd ..
+
+      - echo "Deploying to Lambda..."
+      - aws lambda update-function-code
+          --function-name taskapi
+          --zip-file fileb://lambda.zip
+          --region ap-south-1
+
+artifacts:
+  files:
+    - lambda.zip
+  discard-paths: yes

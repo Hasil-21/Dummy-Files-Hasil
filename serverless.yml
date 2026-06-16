@@ -4,29 +4,12 @@ provider:
   name: aws
   runtime: dotnet8
   region: ap-south-1
-  memorySize: 512
-  timeout: 30
-
-  vpc:
-    securityGroupIds:
-      - sg-0fae0b4067744f26a
-    subnetIds:
-      - subnet-0d1cbb6674856b351
-      - subnet-0ba92b13c578ff7dc
-
-  environment:
-    CONNECTION_STRING: "Host=demodb.cbym6qeguqg4.ap-south-1.rds.amazonaws.com;Port=5432;Database=postgres;Username=demo_admin;Password=Demo#1234"
-
-  iamRoleStatements:
-    - Effect: Allow
-      Action: 
-        - ec2:*
-        - logs:*
-      Resource: "*"
 
 functions:
   demo-project-lambda-sls:
     handler: TaskApi 
+    memorySize: 512
+    timeout: 30
     events: 
       - http:
           path: /{proxy+}
@@ -36,4 +19,24 @@ functions:
           path: /
           method: ANY
           cors: true
+    vpc: 
+      securityGroupIds:
+        - sg-0fae0b4067744f26a
+      subnetIds:
+        - subnet-0d1cbb6674856b351
+        - subnet-0ba92b13c578ff7dc
+    environment:
+      CONNECTION_STRING: ${ssm:/aws/reference/secretsmanager/demo-project/connection-string}
+    iam:
+      role:
+        statements:
+          - Effect: Allow
+            Action:
+              - logs:*
+              - ec2:*
+              - ssm:GetParameter
+              - ssm:GetParameters
+              - kms:Decrypt    
+            Resource: "*"
+
 

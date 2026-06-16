@@ -8,30 +8,6 @@
       "name": "aws",
       "runtime": "dotnet8",
       "region": "ap-south-1",
-      "memorySize": 512,
-      "timeout": 30,
-      "vpc": {
-        "securityGroupIds": [
-          "sg-0fae0b4067744f26a"
-        ],
-        "subnetIds": [
-          "subnet-0d1cbb6674856b351",
-          "subnet-0ba92b13c578ff7dc"
-        ]
-      },
-      "environment": {
-        "CONNECTION_STRING": "Host=demodb.cbym6qeguqg4.ap-south-1.rds.amazonaws.com;Port=5432;Database=postgres;Username=demo_admin;Password=Demo#1234"
-      },
-      "iamRoleStatements": [
-        {
-          "Effect": "Allow",
-          "Action": [
-            "ec2:*",
-            "logs:*"
-          ],
-          "Resource": "*"
-        }
-      ],
       "stage": "dev",
       "versionFunctions": true,
       "compiledCloudFormationTemplate": {
@@ -170,9 +146,6 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/demo-project-dev*:*:*"
                           }
                         ]
-                      },
-                      {
-                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][0]"
                       }
                     ]
                   }
@@ -215,7 +188,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/demo-project/dev/1781593836761-2026-06-16T07:10:36.761Z/demo-project.zip"
+                "S3Key": "serverless/demo-project/dev/1781594209363-2026-06-16T07:16:49.363Z/demo-project.zip"
               },
               "Handler": "TaskApi",
               "Runtime": "dotnet8",
@@ -234,12 +207,13 @@
                 ]
               },
               "VpcConfig": {
-                "SecurityGroupIds": {
-                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
-                },
-                "SubnetIds": {
-                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
-                }
+                "SecurityGroupIds": [
+                  "sg-0fae0b4067744f26a"
+                ],
+                "SubnetIds": [
+                  "subnet-0d1cbb6674856b351",
+                  "subnet-0ba92b13c578ff7dc"
+                ]
               }
             },
             "DependsOn": [
@@ -471,7 +445,7 @@
               "DemoDashprojectDashlambdaDashslsLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1781593834176": {
+          "ApiGatewayDeployment1781594206041": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -651,12 +625,15 @@
             }
           }
         }
-      }
+      },
+      "vpc": {}
     },
     "pluginsData": {},
     "functions": {
       "demo-project-lambda-sls": {
         "handler": "TaskApi",
+        "memorySize": 512,
+        "timeout": 30,
         "events": [
           {
             "http": {
@@ -707,12 +684,38 @@
             }
           }
         ],
+        "vpc": {
+          "securityGroupIds": {
+            "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"DemoDashprojectDashlambdaDashslsLambdaFunction\"][\"Properties\"][\"VpcConfig\"][\"SecurityGroupIds\"]"
+          },
+          "subnetIds": {
+            "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"DemoDashprojectDashlambdaDashslsLambdaFunction\"][\"Properties\"][\"VpcConfig\"][\"SubnetIds\"]"
+          }
+        },
+        "environment": {
+          "CONNECTION_STRING": "Host=demodb.cbym6qeguqg4.ap-south-1.rds.amazonaws.com;Port=5432;Database=postgres;Username=demo_admin;Password=Demo#1234"
+        },
+        "iam": {
+          "role": {
+            "statements": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "logs:*",
+                  "ec2:*",
+                  "ssm:GetParameter",
+                  "ssm:GetParameters",
+                  "kms:Decrypt"
+                ],
+                "Resource": "*"
+              }
+            ]
+          }
+        },
         "name": "demo-project-dev-demo-project-lambda-sls",
         "package": {},
         "memory": 512,
-        "timeout": 30,
         "runtime": "dotnet8",
-        "vpc": {},
         "versionLogicalId": "DemoDashprojectDashlambdaDashslsLambdaVersionY08qhF0PdVgIai29msSDr8UfxP9uGukCgm2fd8"
       }
     },
@@ -732,7 +735,7 @@
     "artifact": "C:\\Users\\pca56\\Desktop\\TaskApi\\TaskApi\\.serverless\\demo-project.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/demo-project/dev/1781593836761-2026-06-16T07:10:36.761Z",
+    "artifactDirectoryName": "serverless/demo-project/dev/1781594209363-2026-06-16T07:16:49.363Z",
     "artifact": "demo-project.zip"
   }
 }

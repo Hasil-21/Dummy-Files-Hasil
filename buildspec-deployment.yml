@@ -37,6 +37,7 @@ phases:
       #     --region ap-south-1
 
       - echo "Deploying Infrastructure..."
+      - npm install -g serverless
       - npm run deploy
 
 artifacts:

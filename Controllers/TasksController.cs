@@ -12,10 +12,6 @@ public class TasksController : ControllerBase
     private readonly AppDbContext _db;
     public TasksController(AppDbContext db) => _db = db;
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll() =>
-        Ok(await _db.Tasks.ToListAsync());
-
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {

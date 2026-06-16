@@ -34,9 +34,10 @@ functions:
             Action:
               - logs:*
               - ec2:*
-              - ssm:GetParameter
-              - ssm:GetParameters
+              - ssm:*
               - kms:Decrypt    
             Resource: "*"
+    package: 
+      artifact: s3://demo-project-artifact-hasil/latest/lambda.zip
 
 

@@ -113,4 +113,70 @@ Resources:
           - subnet-0d1cbb6674856b351
         SecurityGroupIds:
           - sg-0fae0b4067744f26a
+
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:  
+              Service:
+                - codepipeline.amazonaws.com
+            Action:
+              - sts:AssumeRole
       
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:*
+                Resource: "*"
+          PolicyName: CodePipelinePolicy
+
+  CodePipelineProject:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      Stages:
+        - Actions:
+            - ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Provider: CodeStarSourceConnection
+                Version: '1'
+              Name: GitHub
+              Configuration:
+                ConnectionArn: arn:aws:codeconnections:ap-south-1:292578125952:connection/b317277a-0fbe-4331-827e-f33e3917a3ff
+                FullRepositoryId: https://github.com/Hasil-21/Dummy-Files-Hasil.git
+                BranchName: main
+          Name: Source 
+
+        - Actions:
+            - ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              Name: DB
+              Configuration:
+                ProjectName: demo-project-migration
+              InputArtifacts:
+                - Name: SourceOutput
+          Name: DatabaseMigration   
+
+        - Actions:
+            - ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              Name: API
+              Configuration:
+                ProjectName: demo-project-deploy
+              InputArtifacts:
+                - Name: SourceOutput
+          Name: LambdaDeploy

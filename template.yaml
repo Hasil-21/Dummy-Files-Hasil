@@ -1,0 +1,100 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: CloudFormation template to deploy CodeBuild
+
+Resources:
+  #Deployment
+  CodeBuildDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - s3:*
+                  - lambda:*
+                  - logs:*
+                  - ec2:*
+                Resource: "*"
+          PolicyName: CodeBuildDeployPolicy
+
+  CodeBuildDeployProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: demo-project-deploy
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux-x86_64-standard:6.0
+        Type: LINUX_CONTAINER
+      ServiceRole: !GetAtt CodeBuildDeployRole.Arn
+      Source:
+        Type: GITHUB
+        Location: https://github.com/Hasil-21/Dummy-Files-Hasil.git
+        GitCloneDepth: 1
+        BuildSpec: buildspec-deployment.yml
+      
+
+  #Migration
+  CodeBuildMigrationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: 
+              Service:
+                - codebuild.amazonaws.com
+            Action:
+              - sts:AssumeRole
+        
+      Policies:
+        - PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - s3:*
+                  - lambda:*
+                  - logs:*
+                  - ec2:*
+                  - rds:*
+                Resource: "*"
+          PolicyName: CodeBuildMigrationPolicy
+
+  CodeBuildMigrationProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: demo-project-migration
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux-x86_64-standard:6.0
+        Type: LINUX_CONTAINER
+      ServiceRole: !GetAtt CodeBuildMigrationRole.Arn
+      Source:
+        Type: GITHUB
+        Location: https://github.com/Hasil-21/Dummy-Files-Hasil.git
+        GitCloneDepth: 1
+        BuildSpec: buildspec-migration.yml
+      VpcConfig:
+        VpcId: vpc-0cdb9341e56401645
+        Subnets:
+          - subnet-0ba92b13c578ff7dc
+          - subnet-0d1cbb6674856b351
+        SecurityGroupIds:
+          - sg-0fae0b4067744f26a
+      

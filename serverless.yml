@@ -40,7 +40,7 @@ functions:
               - kms:Decrypt    
             Resource: "*"
     destinations:
-      onSuccess: ${cf:demo-project-cf.SlsSQSQueueArn}
+      onSuccess: arn:aws:sqs:ap-south-1:292578125952:demo-queue2
 
 
 

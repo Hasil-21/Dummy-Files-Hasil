@@ -40,7 +40,7 @@ functions:
               - kms:Decrypt    
             Resource: "*"
     destinations:
-      onSuccess: ${cf:demo-project-cf.SlsSQSQueueUrl}
+      onSuccess: ${cf:demo-project-cf.SlsSQSQueueArn}
 
 
 

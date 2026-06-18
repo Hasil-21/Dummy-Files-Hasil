@@ -179,7 +179,7 @@ Resources:
   DemoSQSQueue:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: demo-queue
+      QueueName: demo-queue2
 
   #Deployment
 
@@ -389,3 +389,7 @@ Outputs:
 
   SQSUrl:
     Value: !Ref DemoSQSQueue
+
+
+
+    

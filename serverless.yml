@@ -27,7 +27,8 @@ functions:
         - ${cf:demo-project-cf.SlsPrivateSubnet1}
         - ${cf:demo-project-cf.SlsPrivateSubnet2}
     environment:
-      CONNECTION_STRING: ${ssm:/aws/reference/secretsmanager/dummy-project/connection-string}  
+      CONNECTION_STRING: ${ssm:/aws/reference/secretsmanager/dummy-project/connection-string}
+      SQS_URL: ${cf:demo-project-cf.SQSUrl}  
     iam:
       role:
         statements:
@@ -38,6 +39,8 @@ functions:
               - ssm:*
               - kms:Decrypt    
             Resource: "*"
+    destinations:
+      onSuccess: ${cf:demo-project-cf.SlsSQSQueueUrl}
 
 
 

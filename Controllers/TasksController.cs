@@ -34,7 +34,7 @@ public class TasksController : ControllerBase
         await _db.SaveChangesAsync();
         await _sqs.SendMessageAsync(new SendMessageRequest
         {
-            QueueUrl="https://sqs.ap-south-1.amazonaws.com/292578125952/demo-queue",
+            QueueUrl=Environment.GetEnvironmentVariable("SQS_URL"),
             MessageBody = JsonSerializer.Serialize(task)
         });
         return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
